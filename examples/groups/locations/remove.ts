@@ -41,6 +41,7 @@ const { location } = await inquirer.prompt<{ location: string }>({
     value,
   })),
 });
+console.log(fmt.muted(`Selected location: ${location}`));
 
 const { group: removed } = await turso.groups.removeLocation(
   organization,

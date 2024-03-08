@@ -28,7 +28,6 @@ const { group } = await inquirer.prompt<{ group: string }>({
   loop: false,
   choices: groups.map((g) => g.name),
 });
-console.log(fmt.muted(`Selected group: ${group}`));
 
 console.log(
   fmt.danger(`

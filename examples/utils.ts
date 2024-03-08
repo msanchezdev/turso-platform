@@ -14,8 +14,9 @@ export const turso = new TursoPlatformClient({
 
 export const fmt = {
   string: (s: string) => chalk.blue(s),
-  boolean: (b: boolean) => chalk.yellow(b.toString()),
-  number: (n: number) => chalk.yellow(n.toString()),
+  boolean: (b: boolean) => chalk.yellow(b),
+  date: (b: Date) => chalk.yellow(b),
+  number: (n: number) => chalk.yellow(n),
 
   primary: (s: string) => chalk.blue(s),
   secondary: (s: string) => chalk.yellow(s),
@@ -24,4 +25,9 @@ export const fmt = {
   success: (s: string) => chalk.green(s),
   danger: (s: string) => chalk.redBright(s),
   warning: (s: string) => chalk.yellow(s),
+};
+
+export const filters = {
+  required: (message?: string) => (input: string) =>
+    input ? true : message ?? 'this field is required',
 };

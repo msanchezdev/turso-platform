@@ -34,13 +34,12 @@ interface Database {
 interface DatabaseCreatePayload {
   name: string;
   group: string;
-  seed?: DatabaseCreateSeed;
+  seed?: DatabaseCreateWithDatabaseSeed;
   size_limit?: string;
 }
 
-interface DatabaseCreateSeed {
+interface DatabaseCreateWithDatabaseSeed {
+  type: 'database';
   name: string;
-  type: 'database' | 'dump';
-  timestamp: string;
-  url: string;
+  timestamp?: string;
 }

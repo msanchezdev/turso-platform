@@ -49,6 +49,8 @@ const { destination } = await inquirer.prompt<{ destination: string }>({
   })),
 });
 
+console.log(fmt.muted(`Selected location: ${destination}`));
+
 const { group: transferred } = await turso.groups.addLocation(
   organization,
   group,

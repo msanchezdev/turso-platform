@@ -30,8 +30,6 @@ if (!selectedGroup) {
   process.exit(1);
 }
 
-console.log(fmt.muted(`Selected group: ${group}`));
-
 console.log('Upgrading databases...');
 
 console.log(
