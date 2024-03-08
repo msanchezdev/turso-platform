@@ -34,7 +34,7 @@ interface Database {
 interface DatabaseCreatePayload {
   name: string;
   group: string;
-  seed?: DatabaseCreateWithDatabaseSeed;
+  seed?: DatabaseCreateWithDatabaseSeed | DatabaseCreateWithDumpSeed;
   size_limit?: string;
 }
 
@@ -42,4 +42,9 @@ interface DatabaseCreateWithDatabaseSeed {
   type: 'database';
   name: string;
   timestamp?: string;
+}
+
+interface DatabaseCreateWithDumpSeed {
+  type: 'dump';
+  url: string;
 }

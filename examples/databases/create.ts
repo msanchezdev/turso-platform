@@ -58,7 +58,7 @@ const { useSeed } = await inquirer.prompt<{
       value: 'database',
     },
     {
-      name: 'From a dump',
+      name: 'From a dump (please upload it first)',
       value: 'dump',
     },
   ],
@@ -128,6 +128,29 @@ if (!useSeed) {
       name: seedDatabase,
       type: 'database',
       timestamp: parsedTimestamp?.toISOString(),
+    },
+  });
+
+  console.log(
+    `Database created: ${fmt.primary(database.Name)} (${fmt.secondary(
+      database.DbId,
+    )})`,
+  );
+  process.exit(0);
+} else if (useSeed === 'dump') {
+  const { url } = await inquirer.prompt<{ url: string }>({
+    type: 'input',
+    message: 'Provide the URL of the dump you want to use',
+    name: 'url',
+  });
+
+  const { database } = await turso.databases.create(organization, {
+    name,
+    group: selectedGroup.name,
+    size_limit: size,
+    seed: {
+      type: 'dump',
+      url,
     },
   });
 
