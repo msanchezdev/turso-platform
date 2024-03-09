@@ -1,3 +1,4 @@
+BEGIN TRANSACTION;
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
@@ -38,3 +39,5 @@ INSERT INTO user_contacts (user_id, contact_id) VALUES
 (2, 3),
 (2, 4),
 (2, 5);
+
+COMMIT;

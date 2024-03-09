@@ -1,10 +1,6 @@
-import chalk from 'chalk';
-import type {
-  GroupDatabaseExtension,
-  GroupTokenAuthorizationLevel,
-} from '../../src/groups';
-import { turso, fmt, confirmExplicit } from '../utils';
 import inquirer from 'inquirer';
+import { confirmExplicit, fmt, turso } from '../utils';
+import chalk from 'chalk';
 
 const organizations = await turso.organizations.list();
 const { organization } = await inquirer.prompt<{ organization: string }>({
@@ -20,20 +16,20 @@ const { organization } = await inquirer.prompt<{ organization: string }>({
 
 console.log(fmt.muted(`Selected organization: ${organization}`));
 
-const { groups } = await turso.groups.list(organization);
-const { group } = await inquirer.prompt<{ group: string }>({
+const { databases } = await turso.databases.list(organization);
+const { databaseName } = await inquirer.prompt<{ databaseName: string }>({
   type: 'list',
-  message: 'Select a group to delete',
-  name: 'group',
+  message: 'Select a database',
+  name: 'databaseName',
   loop: false,
-  choices: groups.map((g) => g.name),
+  choices: databases.map((d) => d.Name),
 });
 
 console.log(
   fmt.danger(`
   ${chalk.bold(
     `PROCEED WITH CAUTION:`,
-  )} This operation is irreversible. All tokens for the group ${group} in the organization ${organization} will be invalidated.
+  )} This operation is irreversible. All tokens for this database will be deleted.
 `),
 );
 
@@ -43,5 +39,5 @@ if (!confirmed) {
   process.exit(0);
 }
 
-await turso.groups.invalidateTokens(organization, group);
+await turso.databases.invalidateTokens(organization, databaseName);
 console.log(fmt.success('Tokens invalidated'));

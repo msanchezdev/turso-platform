@@ -25,16 +25,26 @@ export class HttpClient {
   #baseUrl = 'https://api.turso.tech';
   #token = '';
 
-  #getDefaultHeaders() {
-    const defaults: Record<string, string> = {
-      'Content-Type': 'application/json',
+  prepareRequest(options: RequestInit = {}, body?: RequestInit['body']) {
+    const headers: Record<string, string> = {};
+
+    const prepared: RequestInit = {
+      ...options,
+      headers,
     };
 
     if (this.#token) {
-      defaults['Authorization'] = `Bearer ${this.#token}`;
+      headers['Authorization'] = `Bearer ${this.#token}`;
     }
 
-    return defaults;
+    if (body instanceof FormData) {
+      prepared.body = body;
+    } else {
+      headers['Content-Type'] = 'application/json';
+      prepared.body = JSON.stringify(body);
+    }
+
+    return prepared;
   }
 
   setToken(token: string) {
@@ -70,10 +80,7 @@ export class HttpClient {
       fetch(url, {
         ...options,
         method: 'GET',
-        headers: {
-          ...this.#getDefaultHeaders(),
-          ...options.headers,
-        },
+        ...this.prepareRequest(options),
       }),
     );
   }
@@ -85,13 +92,8 @@ export class HttpClient {
 
     return wrapRequest<T>(
       fetch(url, {
-        ...options,
         method: 'POST',
-        headers: {
-          ...this.#getDefaultHeaders(),
-          ...options.headers,
-        },
-        body: JSON.stringify(body),
+        ...this.prepareRequest(options, body),
       }),
     );
   }
@@ -103,13 +105,8 @@ export class HttpClient {
 
     return wrapRequest<T>(
       fetch(url, {
-        ...options,
         method: 'PUT',
-        headers: {
-          ...this.#getDefaultHeaders(),
-          ...options.headers,
-        },
-        body: JSON.stringify(body),
+        ...this.prepareRequest(options, body),
       }),
     );
   }
@@ -121,13 +118,8 @@ export class HttpClient {
 
     return wrapRequest<T>(
       fetch(url, {
-        ...options,
         method: 'PATCH',
-        headers: {
-          ...this.#getDefaultHeaders(),
-          ...options.headers,
-        },
-        body: JSON.stringify(body),
+        ...this.prepareRequest(options, body),
       }),
     );
   }
@@ -139,12 +131,8 @@ export class HttpClient {
 
     return wrapRequest<T>(
       fetch(url, {
-        ...options,
         method: 'DELETE',
-        headers: {
-          ...this.#getDefaultHeaders(),
-          ...options.headers,
-        },
+        ...this.prepareRequest(options),
       }),
     );
   }

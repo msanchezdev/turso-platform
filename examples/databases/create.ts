@@ -6,6 +6,7 @@ const { organization } = await inquirer.prompt<{ organization: string }>({
   type: 'list',
   message: 'Select an organization',
   name: 'organization',
+  loop: false,
   choices: organizations.map((o) => ({
     name: o.name,
     value: o.slug,
@@ -19,6 +20,7 @@ const { group } = await inquirer.prompt<{ group: string }>({
   type: 'list',
   message: 'Select a group',
   name: 'group',
+  loop: false,
   choices: groups.map((g) => g.name),
 });
 
@@ -48,6 +50,7 @@ const { useSeed } = await inquirer.prompt<{
   type: 'list',
   message: 'Do you want to use seed the database?',
   name: 'useSeed',
+  loop: false,
   choices: [
     {
       name: 'No',
@@ -83,6 +86,7 @@ if (!useSeed) {
     type: 'list',
     message: 'Select a database to use as seed',
     name: 'seedDatabase',
+    loop: false,
     choices: databases.map((d) => ({
       name: d.Name,
       value: d.Name,

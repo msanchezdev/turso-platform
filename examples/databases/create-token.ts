@@ -1,9 +1,7 @@
-import type {
-  GroupDatabaseExtension,
-  GroupTokenAuthorizationLevel,
-} from '../../src/groups';
-import { turso, fmt } from '../utils';
 import inquirer from 'inquirer';
+import { confirmExplicit, fmt, turso } from '../utils';
+import chalk from 'chalk';
+import type { DatabaseAuthorizationLevel } from '../../src/databases';
 
 const organizations = await turso.organizations.list();
 const { organization } = await inquirer.prompt<{ organization: string }>({
@@ -19,18 +17,18 @@ const { organization } = await inquirer.prompt<{ organization: string }>({
 
 console.log(fmt.muted(`Selected organization: ${organization}`));
 
-const { groups } = await turso.groups.list(organization);
-const { group } = await inquirer.prompt<{ group: string }>({
+const { databases } = await turso.databases.list(organization);
+const { databaseName } = await inquirer.prompt<{ databaseName: string }>({
   type: 'list',
-  message: 'Select a group to delete',
-  name: 'group',
+  message: 'Select a database',
+  name: 'databaseName',
   loop: false,
-  choices: groups.map((g) => g.name),
+  choices: databases.map((d) => d.Name),
 });
 
 console.log(
-  `We will create a token for the group ${fmt.primary(
-    group,
+  `We will create a token for the database ${fmt.primary(
+    databaseName,
   )} in the organization ${fmt.primary(organization)}`,
 );
 const { expiration } = await inquirer.prompt<{ expiration: string }>({
@@ -42,7 +40,7 @@ const { expiration } = await inquirer.prompt<{ expiration: string }>({
 });
 
 const { authorization } = await inquirer.prompt<{
-  authorization: GroupTokenAuthorizationLevel;
+  authorization: DatabaseAuthorizationLevel;
 }>({
   type: 'list',
   message: 'Authorization level (e.g. full-access, read-only)',
@@ -51,14 +49,14 @@ const { authorization } = await inquirer.prompt<{
   choices: ['full-access', 'read-only'],
 });
 
-const { jwt } = await turso.groups.createToken(organization, group, {
+const { jwt } = await turso.databases.createToken(organization, databaseName, {
   expiration,
   authorization,
 });
 
 console.log(
-  `Token created for group ${fmt.primary(group)} in organization ${fmt.primary(
-    organization,
-  )}`,
+  `Token created for database ${fmt.primary(
+    databaseName,
+  )} in organization ${fmt.primary(organization)}`,
 );
 console.log(fmt.string(`  ${jwt}`));
