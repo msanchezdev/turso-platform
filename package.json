@@ -2,6 +2,13 @@
   "name": "turso-platform",
   "module": "src/index.ts",
   "type": "module",
+  "version": "1.0.0",
+  "author": {
+    "email": "manuel@msanchez.dev",
+    "name": "Manuel Sánchez"
+  },
+  "types": "src/index.ts",
+  "repository": "msanchezdev/turso-platform",
   "devDependencies": {
     "@types/bun": "latest",
     "@types/inquirer": "^9.0.7",

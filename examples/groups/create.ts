@@ -1,5 +1,5 @@
 import type { GroupDatabaseExtension } from '../../src/groups';
-import { turso, fmt } from '../utils';
+import { turso, fmt, filters } from '../utils';
 import inquirer from 'inquirer';
 
 const organizations = await turso.organizations.list();
@@ -19,6 +19,7 @@ const { name } = await inquirer.prompt<{ name: string }>({
   type: 'input',
   message: 'What is the name of the group you want to create?',
   name: 'name',
+  validate: filters.required(),
 });
 
 const { locations } = await turso.locations.list();
